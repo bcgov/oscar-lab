@@ -1,0 +1,23 @@
+{
+  "event": {
+    "provider": "sample-github-action",
+    "reason": "Job triggered",
+    "transient": true,
+    "url": "JOB_URL"
+  },
+  "actions": [
+    {
+      "action": "package-configure",
+      "id": "configure",
+      "provision": ["token/self"],
+      "service": {
+        "name": "vsync",
+        "project": "vault",
+        "environment": "production"
+      }
+    }
+  ],
+  "user": {
+    "name": "$GITHUB_ACTOR@github"
+  }
+}

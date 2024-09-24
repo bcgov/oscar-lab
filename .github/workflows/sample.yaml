@@ -1,0 +1,57 @@
+name: Lab Runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+      # Runs script to obtain Vault token
+      - name: Build Intention
+        run: sh ./.github/workflows/broker-intention.sh
+        env:
+          VAULT_OCP_ACCOUNT_ID: ${{ vars.VAULT_OCP_ACCOUNT_ID }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+      - name: Open intention
+        uses: bcgov-nr/action-broker-intention-open@v2
+        with:
+          broker_jwt: ${{ secrets.BROKER_JWT }}
+          broker_url: ${{ vars.BROKER_ADDR }}
+      - name: Start configure action
+        uses: bcgov-nr/action-broker-action-start@v2
+        with:
+          action_token: ${{ env.ACTION_TOKEN_CONFIGURE }}
+          broker_url: ${{ vars.BROKER_ADDR }}
+      - name: Vault login
+        uses: bcgov-nr/action-broker-vault-login@v2
+        with:
+          action_token: ${{ env.ACTION_TOKEN_CONFIGURE }}
+          broker_url: ${{ vars.BROKER_ADDR }}
+          role_id: ${{ secrets.PROVISION_ROLE_ID }}
+          vault_url: ${{ vars.VAULT_ADDR }}
+      - name: Run Action
+        run: sh ./.github/workflows/action.sh
+        env:
+          VAULT_OCP_ACCOUNT_ID: ${{ vars.VAULT_OCP_ACCOUNT_ID }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+      - name: Revoke Vault Token Action
+        uses: bcgov-nr/action-broker-vault-revoke@v2
+        with:
+          vault_token: ${{ env.VAULT_TOKEN }}
+          vault_url: ${{ vars.VAULT_ADDR }}
+      - name: End configure action
+        uses: bcgov-nr/action-broker-action-end@v2
+        with:
+          action_token: ${{ env.ACTION_TOKEN_CONFIGURE }}
+          broker_url: ${{ vars.BROKER_ADDR }}
+      - name: Close intention
+        uses: bcgov-nr/action-broker-intention-close@v2
+        with:
+          intention_token: ${{ env.INTENTION_TOKEN }}
+          broker_url: ${{ vars.BROKER_ADDR }}
