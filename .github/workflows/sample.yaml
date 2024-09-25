@@ -30,7 +30,6 @@ jobs:
         uses: bcgov-nr/action-broker-action-start@v2
         with:
           action_token: ${{ env.ACTION_TOKEN_CONFIGURE }}
-          broker_url: ${{ vars.BROKER_ADDR }}
       - name: Vault login
         uses: bcgov-nr/action-broker-vault-login@v2
         with:
