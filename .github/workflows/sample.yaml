@@ -25,8 +25,8 @@ jobs:
       - name: Open intention
         uses: bcgov-nr/action-broker-intention-open@v2
         with:
-          broker_jwt: ${{ secrets.BROKER_JWT }}
-          broker_url: ${{ vars.BROKER_ADDR }}
+          broker_jwt: ${{ env.BROKER_JWT }}
+          broker_url: ${{ env.BROKER_URL }}
       - name: Start configure action
         uses: bcgov-nr/action-broker-action-start@v2
         with:
