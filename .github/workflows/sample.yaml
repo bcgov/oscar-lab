@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 
 env:
-  BROKER_URL: https://broker.io.nrs.gov.bc.ca
   BROKER_JWT: ${{ secrets.broker_jwt_dadb08a0_973a_40f7_8c20_63d17e92c3bc }}
 
 jobs:
@@ -26,7 +25,7 @@ jobs:
         uses: bcgov-nr/action-broker-intention-open@v2
         with:
           broker_jwt: ${{ env.BROKER_JWT }}
-          broker_url: ${{ env.BROKER_URL }}
+          intention_path: intention.json
       - name: Start configure action
         uses: bcgov-nr/action-broker-action-start@v2
         with:
