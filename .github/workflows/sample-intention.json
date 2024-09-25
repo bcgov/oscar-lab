@@ -11,13 +11,13 @@
       "id": "configure",
       "provision": ["token/self"],
       "service": {
-        "name": "vsync",
-        "project": "vault",
-        "environment": "production"
+        "name": "oscar-lab",
+        "project": "oscar",
+        "environment": "development"
       }
     }
   ],
   "user": {
-    "name": "$GITHUB_ACTOR@github"
+    "name": "github@internal"
   }
 }
